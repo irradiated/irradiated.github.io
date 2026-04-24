@@ -21,14 +21,15 @@
     <p>
         A web-based checklist management system built for real organizational use,
         designed to track and manage structured checklist data with persistent database storage.
+        2022-present
     </p>
 
     <h4>Tech Stack</h4>
     <ul>
-        <li>Frontend: HTML / CSS / JavaScript</li>
-        <li>Backend: (your backend tech)</li>
+        <li>Frontend: HTML / CSS / JavaScript / Bootstrap</li>
+        <li>Backend: PHP</li>
         <li>Database: MySQL</li>
-        <li>Hosting: (your hosting)</li>
+        <li>LAMP stack on AWS Lightsail</li>
     </ul>
 
     <h4>Key Features</h4>
@@ -61,6 +62,50 @@
     <h2>Contact</h2>
     <p>Email: dakota.flath [at] gmail [dot] com</p>
     <p>GitHub: <a href="https://github.com/irradiated" target="_blank">irradiated</a></p>
+</section>
+
+<section id="etl-project">
+    <h2>Data Ingestion & Validation Pipeline (Python)</h2>
+
+    <p>
+        Developed a Python-based ETL (Extract–Transform–Load) pipeline as part of the RDCODChecklist system.
+        The script automates data ingestion from Google Sheets, applies validation and business rules using
+        pandas, and loads sanitized data into a MariaDB database.
+    </p>
+
+    <h3>Overview</h3>
+    <p>
+        This system bridges spreadsheet-based data entry with a relational database backend, ensuring that
+        incoming data is cleaned, validated, and structured before being persisted in SQL storage.
+    </p>
+
+    <h3>Key Responsibilities</h3>
+    <ul>
+        <li>Integrated with Google Sheets API to extract structured tabular data</li>
+        <li>Implemented data sanitization and transformation logic using pandas</li>
+        <li>Enforced business rules and validation constraints prior to database insertion</li>
+        <li>Mapped spreadsheet data into relational schema format</li>
+        <li>Automated loading of processed data into MariaDB</li>
+    </ul>
+
+    <h3>Tech Stack</h3>
+    <ul>
+        <li>Python</li>
+        <li>pandas</li>
+        <li>Google Sheets API (gspread)</li>
+        <li>MariaDB / SQL</li>
+    </ul>
+
+    <h3>System Role</h3>
+    <p>
+        This pipeline functions as the backend data processing layer for the RDCODChecklist ecosystem,
+        ensuring that user-managed spreadsheet data is reliably transformed into structured database records.
+    </p>
+
+    <h3>Architecture Context</h3>
+    <p>
+        Google Sheets → Python ETL Pipeline → Data Validation (pandas) → MariaDB Database
+    </p>
 </section>
 
 </body>
