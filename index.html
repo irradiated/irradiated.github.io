@@ -13,16 +13,41 @@
     <p>Junior Developer (CIS)</p>
 </header>
 
-<section>
-    <h2>Featured Project</h2>
-
-    <h3>RDCODChecklist – Full-Stack Web Application</h3>
+<section id="rdco-checklist">
+    <h3>RDCO Checklist – Full-Stack Data & Web Application</h3>
 
     <p>
-        A web-based checklist management system built for real organizational use,
-        designed to track and manage structured checklist data with persistent database storage.
-        2022-present
+        A production-style data management and web presentation system for cataloguing over 8,000 species of flora and fauna
+        in the Regional District of Central Okanagan (RDCO). The system was developed for the Central Okanagan Naturalists Club (CONC)
+        and has been actively maintained since 2022.
     </p>
+
+    <p>
+        The project is built as a complete data pipeline and web application ecosystem. A master dataset maintained in Google Sheets
+        is processed through a custom Python ETL pipeline that cleans, validates, and enforces domain-specific business rules before
+        inserting structured records into a MariaDB database.
+    </p>
+
+    <p>
+        A PHP-based web application then dynamically retrieves and presents the processed data from the database, allowing users
+        to browse and interact with the curated species catalogue.
+    </p>
+
+    <h3>System Architecture</h3>
+
+    <p>
+        Google Sheets (Master Dataset) → Python ETL Pipeline (Validation & Transformation) → MariaDB Database → PHP Web Application (Data Presentation)
+    </p>
+
+    <h3>Key Responsibilities</h3>
+
+    <ul>
+        <li>Designed and implemented full-stack data workflow from ingestion to presentation</li>
+        <li>Built Python ETL pipeline to sanitize and validate ~8,000 structured records</li>
+        <li>Defined and enforced business rules for data consistency and integrity</li>
+        <li>Developed PHP-based web application for dynamic database-driven content display</li>
+        <li>Maintained and iteratively improved system (2022–present)</li>
+    </ul>
 
     <h4>Tech Stack</h4>
     <ul>
@@ -52,7 +77,7 @@
 
     <p>
         Developed a Python-based ETL (Extract–Transform–Load) pipeline as part of the RDCODChecklist system.
-        The script automates data ingestion from Google Sheets, applies validation and business rules using
+        A CLI utility that automates data ingestion from Google Sheets, applies validation and business rules using
         pandas, and loads sanitized data into a MariaDB database.
     </p>
 
