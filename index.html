@@ -17,20 +17,19 @@
     <h3>RDCO Checklist – Full-Stack Data & Web Application</h3>
 
     <p>
-        A production-style data management and web presentation system for cataloguing over 8,000 species of flora and fauna
-        in the Regional District of Central Okanagan (RDCO). The system was developed for the Central Okanagan Naturalists Club (CONC)
-        and has been actively maintained since 2022.
+        The RDCO Biodiversity Checklist is a data-driven biodiversity information system that provides a structured, searchable catalogue
+        of approximately 8,000 flora, fauna, and fungi species within the Regional District of Central Okanagan.
     </p>
 
     <p>
-        The project is built as a complete data pipeline and web application ecosystem. A master dataset maintained in Google Sheets
-        is processed through a custom Python ETL pipeline that cleans, validates, and enforces domain-specific business rules before
-        inserting structured records into a MariaDB database.
+        The system is built around a centralized data pipeline where a master dataset is maintained in Google Sheets,
+        processed through a Python ETL validation system, and stored in a MariaDB relational database.
+        The web application layer (PHP) provides a public-facing interface for querying and displaying the processed dataset.
     </p>
 
     <p>
-        A PHP-based web application then dynamically retrieves and presents the processed data from the database, allowing users
-        to browse the catalogue and submit feedback.
+        Rather than a static directory, the system functions as a continuously maintained data platform with enforced
+        schema validation, ensuring consistency, integrity, and long-term maintainability of biological records.
     </p>
 
     <h3>System Architecture</h3>
@@ -42,7 +41,7 @@
     <h3>Key Responsibilities</h3>
 
     <ul>
-        <li>Designed and implemented full-stack data workflow from ingestion to presentation</li>
+        <li>Designed and implemented full-stack data workflow from ingestion to presentation to the clients specifications</li>
         <li>Built Python ETL pipeline to sanitize and validate ~8,000 structured records</li>
         <li>Defined and enforced business rules for data consistency and integrity</li>
         <li>Developed PHP-based web application for dynamic database-driven content display</li>
@@ -54,7 +53,7 @@
         <li>Frontend: HTML / CSS / JavaScript / Bootstrap</li>
         <li>Backend: PHP</li>
         <li>Database: MySQL</li>
-        <li>LAMP stack on AWS Lightsail</li>
+        <li>Deployment: LAMP stack on AWS Lightsail</li>
     </ul>
 
     <h4>Key Features</h4>
@@ -64,6 +63,7 @@
         <li>Contact form and feedback submission</li>
         <li>Database-backed persistence</li>
         <li>Full-stack integration (frontend + backend + DB)</li>
+        <li>Separation of secrets from source code</li>
         <li>Ongoing maintenance and updates</li>
     </ul>
 
@@ -74,49 +74,69 @@
     </ul>
 </section>
 
-<section id="etl-project">
-    <h2>Data Ingestion & Validation Pipeline (Python)</h2>
+<h3>Python ETL & Database Synchronization Pipeline (CLI Utility)</h3>
 
-    <p>
-        Developed a Python-based ETL (Extract–Transform–Load) pipeline as part of the RDCO Checklist system.
-        A CLI utility that automates data ingestion from Google Sheets, applies validation and business rules using
-        pandas, and loads sanitized data into a MariaDB database.
-    </p>
+<p>
+    Developed a production-style ETL (Extract–Transform–Load) pipeline responsible for synchronizing a
+    large biodiversity dataset between Google Sheets and a MariaDB database as part of the RDCO Checklist system.
+    The tool processes a master dataset of ~8,000 species records and enforces strict data integrity rules
+    before committing updates to the production database.
+</p>
 
-    <h3>Overview</h3>
-    <p>
-        This system bridges spreadsheet-based data entry with a relational database backend, ensuring that
-        incoming data is cleaned, validated, and structured before being persisted in SQL storage.
-    </p>
+<p>
+    The system is implemented as a command-line utility with structured execution flow and real-time progress feedback.
+    It connects to Google Sheets via API, performs data validation and transformation using pandas, and securely
+    updates a remote MariaDB database over an SSH tunnel.
+</p>
 
-    <h3>Key Responsibilities</h3>
+<h4>System Architecture</h4>
+<p>
+    Google Sheets (Master Dataset) → Python CLI ETL Tool → Validation Layer (pandas) → SSH Tunnel → MariaDB Database
+</p>
+
+<h4>Core Responsibilities</h4>
+<ul>
+    <li>Extracts structured data from Google Sheets using gspread API integration</li>
+    <li>Implements full data validation layer including:</li>
     <ul>
-        <li>Integrated with Google Sheets API to extract structured tabular data</li>
-        <li>Implemented data sanitization and transformation logic using pandas</li>
-        <li>Enforced business rules and validation constraints prior to database insertion</li>
-        <li>Mapped spreadsheet data into relational schema format</li>
-        <li>Automated loading of processed data into MariaDB</li>
+        <li>Primary key uniqueness enforcement</li>
+        <li>Character limit constraints per field</li>
+        <li>Controlled vocabulary validation (status codes, group types)</li>
+        <li>Schema consistency checks across datasets</li>
     </ul>
+    <li>Transforms spreadsheet data into relational format using pandas</li>
+    <li>Securely connects to remote MariaDB database via SSH tunneling</li>
+    <li>Performs atomic database refresh using truncate-and-replace strategy</li>
+    <li>Provides CLI-based execution with real-time spinner and status feedback</li>
+    <li></li>
+</ul>
 
-    <h3>Tech Stack</h3>
-    <ul>
-        <li>Python</li>
-        <li>pandas</li>
-        <li>Google Sheets API (gspread)</li>
-        <li>MariaDB / SQL</li>
-    </ul>
+<h4>Data Integrity & Validation System</h4>
+<p>
+    The pipeline enforces strict domain-specific business rules before any database write operation,
+    including schema validation, data type enforcement, and controlled taxonomy constraints.
+    Custom exception handling is used to provide precise feedback on validation failures.
+</p>
 
-    <h3>System Role</h3>
-    <p>
-        This pipeline functions as the backend data processing layer for the RDCODChecklist ecosystem,
-        ensuring that user-managed spreadsheet data is reliably transformed into structured database records.
-    </p>
+<h4>Operational Features</h4>
+<ul>
+    <li>Command-line interface with structured execution modes (verify, statistics, update, help)</li>
+    <li>Real-time progress indicators for long-running operations</li>
+    <li>Automated database backup after successful updates</li>
+    <li>Safe database update workflow with pre-validation gatekeeping</li>
+    <li>Designed for non-technical users with a guided CLI workflow, reducing operational complexity and enabling safe execution of database updates</li>
+</ul>
 
-    <h3>Architecture Context</h3>
-    <p>
-        Google Sheets → Python ETL Pipeline → Data Validation (pandas) → MariaDB Database
-    </p>
-</section>
+<h4>Tech Stack</h4>
+<ul>
+    <li>Python</li>
+    <li>pandas</li>
+    <li>gspread (Google Sheets API)</li>
+    <li>SQLAlchemy</li>
+    <li>MariaDB</li>
+    <li>sshtunnel (secure remote database access)</li>
+    <li>argparse (CLI interface)</li>
+</ul>
 <hr class="section-divider">
 <section>
     <h2>Contact</h2>

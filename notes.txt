@@ -1,0 +1,1 @@
+how did i solve the security issue with email? -> store credentials as environment variables server side for the front-end, etl pipeline uses credential files to separate secrets from source code
