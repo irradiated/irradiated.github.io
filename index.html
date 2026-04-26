@@ -3,70 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dakota Flath - Portfolio</title>
+    <title>Dakota Flath - Engineering Portfolio</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
     <h1>Dakota Flath</h1>
-    <p>Junior Developer (CIS)</p>
+    <p>Junior Developer (CIS) — Full-Stack Data Systems Engineering</p>
 </header>
+
 <hr class="section-divider">
 
-<section id="rdco-checklist">
-    <h2>RDCO Biodiversity Checklist: Full-Stack Application & ETL Pipeline</h2>
+<section id="overview">
+    <h2>RDCO Biodiversity Platform</h2>
 
     <p>
-        The <strong>RDCO Biodiversity Checklist</strong> is a comprehensive, full-stack system designed to manage, validate, and present a database of approximately 8,000 recorded flora and fauna species within the Central Okanagan region. Developed for the Central Okanagan Naturalists' Club (CONC), the project bridges the gap between raw data management and public accessibility.
+        The RDCO Biodiversity Checklist is a production data platform built to manage, validate, and present
+        approximately 8,000 species records for the Central Okanagan region of British Columbia. Rather than a simple
+        website, the project functions as a complete engineering system that transforms a continuously maintained
+        ecological dataset into a reliable public-facing reference tool for researchers, naturalists, and regional users.
     </p>
 
     <p>
-        The project consists of two major components working in tandem: a robust Python ETL (Extract-Transform-Load) command-line utility that sanitizes and synchronizes a master Google Sheets dataset, and a dynamic PHP-driven web application that provides a structured, searchable interface for both general reference and expert ecological use.
+        The system supports scientific-name and common-name search, hierarchical taxonomy browsing, species detail pages,
+        biological status tracking, identification assistance ("ID Help"), and correction submission workflows.
+        Each result page presents normalized taxonomy, RDCO confirmation status, naturalization data, external reference
+        links, regional distribution notes, and domain-specific identification guidance.
     </p>
 
-    <h3>System Architecture</h3>
     <p>
-        <strong>Google Sheets</strong> (Master Dataset) → <strong>Python CLI ETL Tool</strong> (Validation & pandas) → <strong>SSH Tunnel</strong> → <strong>MariaDB</strong> (Production Database) → <strong>PHP Web Application</strong> (Data Presentation)
+        The public interface is backed by a controlled ETL pipeline and relational database architecture that ensures
+        taxonomic consistency, validation of controlled vocabularies, and safe operational updates by non-technical users.
+    </p>
+</section>
+
+<hr class="section-divider">
+
+<section id="architecture">
+    <h2>System Architecture</h2>
+
+    <p>
+        Google Sheets (Authoritative Dataset)
+        → Python ETL & Validation Pipeline
+        → MariaDB Relational Database
+        → PHP Application Layer
+        → Search + Taxonomy + ID Help Web Interface
     </p>
 
-    <h3>Web Application & Interface Features</h3>
     <p>
-        The frontend provides an intuitive but deeply detailed way to explore biological classifications, built with a focus on usability and accurate data representation.
+        The engineering goal is controlled transformation of semi-structured biological records into a normalized,
+        searchable biodiversity knowledge base.
     </p>
+</section>
+
+<hr class="section-divider">
+
+<section id="etl">
+    <h2>Data Ingestion & Validation Layer (Python ETL System)</h2>
+
+    <p>
+        The ETL pipeline acts as the system’s control plane. It governs how raw spreadsheet data is extracted,
+        validated, transformed, and safely committed into the production MariaDB database.
+    </p>
+
+    <h3>Core Responsibilities</h3>
     <ul>
-        <li><strong>Taxonomic Navigation:</strong> A persistent sidebar allowing users to browse species by biological groups, sorted in ascending taxonomic order from primitive (Misc. Unicellulars, Algae) to complex (Birds, Mammals).</li>
-        <li><strong>Advanced Search & Querying:</strong> A robust global search that parses scientific and common names, returning categorized results divided into "ID Help Results" (taxonomic rank breakdowns with reference texts) and "Taxa Results."</li>
-        <li><strong>Aggregated Data Dashboards:</strong> A "Groups & Totals" view that calculates and displays the total number of species per biological group, categorized by their local observation status (Confirmed, Probable, To Be Determined).</li>
-        <li><strong>Detailed Species Profiles:</strong> Individual taxon pages displaying full hierarchical taxonomy (Phylum, Class, Order, Family), RDCO Status, Naturalization, and local distribution notes.</li>
-        <li><strong>Dynamic External Integration:</strong> Auto-generated contextual links to external ecological databases like iNaturalist and E-Fauna BC based on the current species profile.</li>
-        <li><strong>Contextual User Feedback:</strong> General contact forms as well as taxon-specific "Submit a Correction" forms embedded directly on species pages to facilitate crowd-sourced database corrections from experts.</li>
+        <li>Connects to Google Sheets using gspread API integration</li>
+        <li>Processes and transforms ~8,000 structured biological records using pandas</li>
+        <li>Enforces primary key uniqueness and schema consistency</li>
+        <li>Validates field constraints, taxonomy groups, and controlled status codes</li>
+        <li>Prevents invalid writes through strict pre-commit validation gates</li>
+        <li>Performs secure remote database updates through SSH tunneling</li>
+        <li>Executes atomic refresh workflow using truncate-and-replace strategy</li>
     </ul>
 
-    <h3>Data Pipeline & Integrity (Python ETL)</h3>
-    <p>
-        To ensure data consistency before it reaches the live website, I built a production-style CLI utility to handle the ingestion and synchronization of the master dataset. Designed for non-technical users, it provides a guided workflow with real-time progress indicators.
-    </p>
+    <h3>Operational Design</h3>
     <ul>
-        <li><strong>Data Extraction:</strong> Connects to the Google Sheets API via <code>gspread</code> to pull structured record updates.</li>
-        <li><strong>Strict Validation Layer:</strong> Uses <code>pandas</code> to enforce primary key uniqueness, field character limits, schema consistency, and controlled vocabulary constraints (e.g., status codes, group types) before any database write operations. Custom exception handling provides precise feedback on validation failures.</li>
-        <li><strong>Secure Database Operations:</strong> Establishes a secure SSH tunnel to the remote AWS server and performs an atomic database refresh using a truncate-and-replace strategy via SQLAlchemy.</li>
-        <li><strong>Automated Backups:</strong> Triggers automated database backups following successful synchronization updates.</li>
+        <li>CLI execution modes for verify, update, statistics, and system help</li>
+        <li>Real-time status feedback and progress indicators for operators</li>
+        <li>Automated backup generation after successful synchronization</li>
+        <li>Designed for safe execution by non-technical staff through guided workflows</li>
+        <li>Custom exception handling for precise validation failure reporting</li>
     </ul>
 
     <h3>Tech Stack</h3>
     <ul>
-        <li><strong>Frontend:</strong> HTML5, CSS3, JavaScript, Bootstrap</li>
-        <li><strong>Backend:</strong> PHP</li>
-        <li><strong>Database:</strong> MariaDB / MySQL</li>
-        <li><strong>Data Pipeline:</strong> Python, pandas, gspread (Google Sheets API), SQLAlchemy, sshtunnel, argparse</li>
-        <li><strong>Deployment & Infrastructure:</strong> LAMP stack on AWS Lightsail</li>
+        <li>Python</li>
+        <li>pandas</li>
+        <li>gspread (Google Sheets API)</li>
+        <li>SQLAlchemy</li>
+        <li>MariaDB</li>
+        <li>sshtunnel</li>
+        <li>argparse</li>
+    </ul>
+</section>
+
+<hr class="section-divider">
+
+<section id="web-system">
+    <h2>Application & Presentation Layer (PHP Web Platform)</h2>
+
+    <p>
+        The web application functions as the system’s query and presentation layer, translating normalized relational
+        data into a searchable scientific reference interface.
+    </p>
+
+    <p>
+        Users can search taxonomic records by scientific or common name (for example, searching “wolf” returns both
+        mammal and lichen records), browse major biological groups through a structured navigation system, and access
+        dedicated species pages containing taxonomy, distribution records, RDCO status, native/exotic classification,
+        external references, and identification guidance.
+    </p>
+
+    <p>
+        The interface also includes an ID Help subsystem for ambiguous taxa, allowing domain experts to provide
+        taxonomic clarification beyond standard database records. A correction submission workflow supports ongoing
+        community-driven maintenance and long-term data reliability.
+    </p>
+
+    <h3>Key Features</h3>
+    <ul>
+        <li>Search-driven species discovery using scientific and common names</li>
+        <li>Hierarchical browsing across major flora and fauna groups</li>
+        <li>Species detail pages with normalized taxonomy presentation</li>
+        <li>RDCO distribution tracking and confirmation status reporting</li>
+        <li>ID Help system for expert classification support</li>
+        <li>User correction and feedback submission workflow</li>
+        <li>Secure deployment with separation of secrets from source code</li>
     </ul>
 
-    <h3>Project Links</h3>
+    <h3>Deployment</h3>
+    <p>
+        LAMP stack deployment on AWS Lightsail with ongoing maintenance, production support, and iterative system
+        improvements since 2022.
+    </p>
+</section>
+
+<hr class="section-divider">
+
+<section id="responsibilities">
+    <h2>Engineering Responsibilities</h2>
+
     <ul>
-        <li><a href="https://rdcochecklist.info" target="_blank">Live Web Application</a></li>
-        <li><em>Source Code: Private (Client requirement, but architecture details available upon request)</em></li>
+        <li>Designed and implemented the full-stack data workflow from ingestion to presentation</li>
+        <li>Built the validation-first ETL pipeline for operational database synchronization</li>
+        <li>Defined business rules for taxonomy consistency and relational integrity</li>
+        <li>Developed the PHP application layer for dynamic database-driven content delivery</li>
+        <li>Maintained production reliability and continuously improved system architecture (2022–present)</li>
+    </ul>
+</section>
+
+<hr class="section-divider">
+
+<section id="links">
+    <h2>Project Access</h2>
+
+    <ul>
+        <li><a href="https://rdcochecklist.info" target="_blank">Live Site</a></li>
+        <li>Source Code: Private (client requirement)</li>
     </ul>
 </section>
 
